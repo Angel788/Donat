@@ -1,0 +1,24 @@
+{
+  "name": "donathon",
+  "version": "1.0.0",
+  "description": "Is an Aplication where you can donate money and keep under observation the donations",
+  "main": "as-pect.config.js",
+  "scripts": {
+    "build": "asb",
+    "build:debug": "asb --target debug",
+    "test": "asp --nologo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Angel788/DonatHON.git"
+  },
+  "author": "Angel Garcia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Angel788/DonatHON/issues"
+  },
+  "homepage": "https://github.com/Angel788/DonatHON#readme",
+  "dependencies": {
+    "near-sdk-as": "^3.2.3"
+  }
+}
