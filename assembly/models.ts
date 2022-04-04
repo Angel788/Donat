@@ -11,6 +11,7 @@ export class Contributor{
     this.email=_email;
     this.name=_name;
     this.contributons=new PersistentMap<string,string>(_contributorId+"_contributors");
+    this.totalMount="0";
   }
   addDonation(idFundation:string,quantity:string):bool{
     let mountDonate:string=quantity;
