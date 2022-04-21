@@ -1,4 +1,4 @@
-import {PersistentMap} from 'near-sdk-as'
+import {PersistentMap, PersistentVector} from 'near-sdk-as'
 
 export class Contributor{
   contributorId:string;
@@ -17,15 +17,12 @@ export class Contributor{
     let mountDonate:number=quantity;
     let exist:boolean=Fundations.contains(idFundation);
     if(exist){
-      let exitDonation:boolean=Fundations[idFundation].getContributions.contains[this.contributorId];
-      if(exitDonation){
-        mountDonate+=Fundations[idFundation].getContribution[this.contributorId];
-        return true;
-      }
-      this.totalMount=mountDonate;
-      Fundations[idFundation].setContribution(this.contributorId,mountDonate);
-      this.contributons[idFundation].set(this.contributorId,mountDonate);
-
+      let exitdonation:boolean=this.contributons.contains(idFundation);
+      let lastDonation:number=0;
+      if(exitdonation) lastDonation=this.contributons[idFundation];
+      Fundations[idFundation].setContribution(mountDonate);
+      this.contributons.pushBack(mountDonate+lastDonation);
+      return true;
     }
     return false;
   }
@@ -52,19 +49,24 @@ export class Fundation{
   email:string;
   fundraising:number;
   contributions: PersistentMap<string,number>;
-  outlays: PersistentMap<string,Outlay>;
+  outlays: PersistentVector<Outlay>;
+  iterator: number;
   constructor(_idFundation:string,_location:string,_phone:string,_email:string){
     this.idFundation=_idFundation;
     this.location=_location;
     this.phone=_phone;
     this.email=_email;
     this.fundraising=0;
-    this.contributions=new PersistentMap<string,number>(_idFundation+"c");
-    this.outlays=new PersistentMap<string,Outlay>(this.idFundation+"o")
+    this.contributions=new PersistentMap<string,number>(this.idFundation+"c");
+    this.outlays=new PersistentVector<Outlay>(this.idFundation+"o");
+    this.iterator=0;
   }
   setContribution(contributorId:string,mount:number):void{
-    this.contributions.set(contributorId,mount);
-    this.fundraising+=mount;
+    let exist:boolean=this.contributions.contains(contributorId);
+    let amount:number=0;
+    if(exist)amount=this.contributions.get(contributorId);
+    this.contributions.set(contributorId,mount+amount);
+    this.fundraising+=mount+amount;
   }
   getContribution(contributorId:string):number{
     return this.contributions[contributorId];
@@ -87,10 +89,13 @@ export class Fundation{
   setOutlay(_email:string,_location:string,_mount:number,_phone:string,_description:string):boolean{
     if(this.fundraising>=_mount){
       this.fundraising-=_mount;
-      this.outlays.set("1",new Outlay(_email,_location,_mount,_phone,_description));
+      this.outlays.pushBack(new Outlay(_email,_location,_mount,_phone,_description);
       return true;
     }
     return false;
+  }
+  get0utlay():PersistentVector<Outlay>{
+    return this.outlays;
   }
 }
 class Outlay{
